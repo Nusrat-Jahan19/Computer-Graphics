@@ -1,0 +1,70 @@
+<html>
+<title>Offline-01_180104020_A1.html</title>
+<canvas id="webglcanvas" width="500" height="400"></canvas>
+
+<script>
+
+    var canvas = document.getElementById("webglcanvas"); 
+    var  gl = canvas.getContext("webgl");
+    
+    var vShaderSource =
+       `attribute vec3 coords;
+        void main() {
+            gl_Position = vec4(coords, 1.0);
+        }`;
+
+
+    var fShaderSource =
+       `void main() {
+            gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+        }`;
+    
+    var vsh = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vsh, vShaderSource);
+    gl.compileShader(vsh);
+
+    var fsh = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fsh, fShaderSource);
+    gl.compileShader(fsh);
+    
+    var prog = gl.createProgram(); 
+
+    gl.attachShader(prog, vsh); 
+    gl.attachShader(prog, fsh);
+    gl.linkProgram(prog); 
+    gl.useProgram(prog); 
+    
+
+    var coords_location = gl.getAttribLocation(prog, "coords");
+
+    var coords = new Float32Array([ 
+	                                0.010,  0.8, 0.0,
+                                    0.010,  0.11, 0.0,
+                                    0.5, 0.11, 0.0,//
+									0.0008,  0.57, 0.0,
+                                    -0.000001, 0.11, 0.0,
+                                    -0.5, 0.11, 0.0,//									
+									-0.5,  0.10, 0.0,
+                                     0.5,  0.10, 0.0,
+                                    -0.3, -0.10, 0.0,
+                                    -0.3, -0.10, 0.0,
+                                     0.5,  0.10, 0.0,
+                                     0.3, -0.10, 0.0 
+                                    ]);
+
+    var coords_buffer = gl.createBuffer();
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, coords_buffer); 
+    gl.bufferData(gl.ARRAY_BUFFER, coords, gl.STATIC_DRAW); 
+    gl.vertexAttribPointer(coords_location, 3, gl.FLOAT, false, 0, 0); 
+    gl.enableVertexAttribArray(coords_location);
+	
+    gl.clearColor(0.80, 0.90, 1.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, 3); 
+	gl.drawArrays(gl.TRIANGLES, 3, 3);
+	gl.drawArrays(gl.TRIANGLES, 6, 12); 
+   
+</script>
+
+</html>
